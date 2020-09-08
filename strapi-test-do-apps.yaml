@@ -1,0 +1,28 @@
+databases:
+- engine: PG
+  name: strapi-test-do-app-db
+  num_nodes: 1
+  size: db-s-dev-database
+  version: "12"
+name: strapi-test-do-apps
+region: ams3
+services:
+- build_command: yarn build --no-optimization
+  environment_slug: node-js
+  envs:
+  - key: NODE_ENV
+    scope: RUN_AND_BUILD_TIME
+    value: production
+  - key: DATABASE_URL
+    scope: RUN_AND_BUILD_TIME
+    value: ${strapi-test-do-app-db.DATABASE_URL}
+  github:
+    branch: master
+    deploy_on_push: true
+    repo: derrickmehaffy/TestDO
+  instance_count: 1
+  instance_size_slug: professional-s
+  name: strapi-test-do-apps
+  routes:
+  - path: /
+  run_command: yarn start
